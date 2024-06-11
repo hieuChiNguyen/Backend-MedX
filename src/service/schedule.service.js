@@ -1,5 +1,7 @@
-import Doctor from "../model/doctor";
-import Schedule from "../model/schedule";
+import { Op, Sequelize } from "sequelize"
+import Doctor from "../model/doctor"
+import Schedule from "../model/schedule"
+const { startOfWeek, endOfWeek, addDays, format } = require('date-fns')
 
 let checkExistDoctor = (doctorId) => {
     return new Promise(async (resolve, reject) => {
@@ -24,35 +26,39 @@ let getAllSchedulesByDoctorId = (doctorId) => {
             let check_doctor = await checkExistDoctor(doctorId)
             if (check_doctor) {
                 let currentDate = new Date();
-                let currentDay = currentDate.getDay();
-                
-                // Nếu ngày hiện tại là thứ 7 (6) hoặc chủ nhật (0), chuyển đến thứ 2 tuần sau
-                if (currentDay === 0) {
-                    currentDate.setDate(currentDate.getDate() + 1);
-                } else if (currentDay === 6) {
-                    currentDate.setDate(currentDate.getDate() + 2);
-                }
-                
-                let startOfWeek = new Date(currentDate);
-                let endOfWeek = new Date(currentDate);
 
-                startOfWeek.setDate(currentDate.getDate() - (currentDay - 1));
-                endOfWeek.setDate(startOfWeek.getDate() + 4);
+                // Xác định đầu tuần (thứ 2)
+                let startOfWeekDate = startOfWeek(currentDate, { weekStartsOn: 1 }); // Thứ 2
+                // let endOfWeekDate = endOfWeek(currentDate, { weekStartsOn: 1 }); // Chủ nhật
+
+                // Chỉ lấy dữ liệu từ thứ 2 đến thứ 6
+                let startDate = startOfWeekDate;
+                let endDate = addDays(startOfWeekDate, 5); // Thứ 6
 
                 const schedules = await Schedule.findAll({
                     where: {
                         doctorId: doctorId,
                         date: {
-                            [Op.between]: [startOfWeek, endOfWeek]
+                            [Op.between]: [format(startDate, 'yyyy-MM-dd'), format(endDate, 'yyyy-MM-dd')]
                         }
-                    }
+                    },
+                    attributes: {
+                        exclude: ['createdAt', 'updatedAt']
+                    },
+                    order: [
+                        ['date', 'ASC'], 
+                        ['timeSlot', 'ASC'] 
+                    ] 
                 });
+
+                const length = schedules.length
 
                 if (schedules && schedules.length > 0) {
                     resolve({
                         errCode: 0,
                         message: 'OK',
-                        data: schedules
+                        data: schedules,
+                        length: length
                     })
                 } else {
                     resolve({
@@ -77,17 +83,38 @@ let getAllSchedulesByDoctorId = (doctorId) => {
 let createNewSchedules = (scheduleData) => {
     return new Promise(async (resolve, reject) => {
         try {
-            // check doctor was already existed
-            let doctor = await Doctor.findOne({
-                where: { id: scheduleData.doctorId }
-            })
-
             let timeSlots = [...scheduleData.timeSlots]
+
+            if (timeSlots.length < 8) {
+                resolve({
+                    errCode: 3,
+                    message: 'Bác sĩ phải chọn ít nhất 8 khung giờ'
+                });
+            }
 
             let newSchedules = []
 
-            if (doctor) {
-                for (const timeSlot of timeSlots) {
+            let scheduleDate = new Date();
+            let dayOfWeek = scheduleDate.getDay();
+
+            if (dayOfWeek !== 0 && dayOfWeek !== 6) {
+                resolve({
+                    errCode: 2,
+                    message: 'Bác sĩ chỉ có thể đặt lịch mới vào thứ 7 và chủ nhật'
+                });
+            }
+
+          
+            for (const timeSlot of timeSlots) {
+                let existedSchedule = await Schedule.findOne({
+                    where: {
+                        doctorId: scheduleData.doctorId,
+                        date: new Date(scheduleData.date),
+                        timeSlot: timeSlot
+                    }
+                });
+
+                if (!existedSchedule) {
                     let newSchedule = await Schedule.create({
                         currentNumber: 0,
                         maxNumber: 2,
@@ -98,7 +125,9 @@ let createNewSchedules = (scheduleData) => {
 
                     newSchedules.push(newSchedule);
                 }
-               
+            }
+            
+            if (newSchedules.length > 0) {
                 resolve({
                     errCode: 0,
                     message: 'OK',
@@ -107,9 +136,42 @@ let createNewSchedules = (scheduleData) => {
             } else {
                 resolve({
                     errCode: 1,
-                    message: 'Không tìm thấy bác sĩ'
-                })
+                    message: 'Các lịch này đã được đặt trước đó',
+                    data: []
+                });
             }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+
+let getRemainScheduleByDate = (data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            // const maxNumber = 2
+            const remainSchedules = await Schedule.findAll({
+                where: {
+                    date: new Date(data.date),
+                    doctorId: data.doctorId,
+                    currentNumber: {
+                        [Op.lt]: Sequelize.col('maxNumber')
+                    }
+                },
+                attributes: {
+                    exclude: ['createdAt', 'updatedAt']
+                },
+                order: [
+                    [Sequelize.fn('STR_TO_DATE', Sequelize.col('timeSlot'), '%h:%i %p'), 'ASC']
+                ]
+            })
+            
+            resolve({
+                errCode: 0,
+                message: 'OK',
+                data: remainSchedules
+            });
+            
         } catch (error) {
             reject(error);
         }
@@ -119,4 +181,5 @@ let createNewSchedules = (scheduleData) => {
 module.exports = {
     getAllSchedulesByDoctorId,
     createNewSchedules,
+    getRemainScheduleByDate
 };

@@ -24,14 +24,11 @@ let saveDoctorDetailContent = (data) => {
 let getDoctorMarkdownContent = (doctorId) => {
     return new Promise(async (resolve, reject) => {
         try {
-            console.log('haha::');
             const doctorContent = await Markdown.findOne({
                 where: {
                     doctorId: doctorId
                 }
             });
-
-            console.log('check doctor content::', doctorContent);
 
             resolve({
                 errCode: 0,

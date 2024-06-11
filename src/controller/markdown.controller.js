@@ -4,10 +4,7 @@ let saveDoctorDetailContent = async (req, res) => {
     try {
         let data = req.body;
 
-        console.log('check data::', data);
-
         let new_markdown = await markdownService.saveDoctorDetailContent(data);
-        console.log('check new_markdown::', new_markdown);
 
         if (new_markdown.errCode === 0) {
             return res.status(201).json(new_markdown);
@@ -21,10 +18,7 @@ let saveDoctorDetailContent = async (req, res) => {
 }
 
 let getDoctorMarkdownContent = async (req, res) => {
-    console.log('haha::2');
     const doctorId = req.params.doctorId
-    console.log('haha1::');
-    console.log('doctorId::', doctorId);
     let doctorContent = await markdownService.getDoctorMarkdownContent(doctorId);
 
     if (doctorContent.errCode === 0) {

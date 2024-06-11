@@ -7,6 +7,7 @@ import Schedule from "../model/schedule";
 import Appointment from "../model/appointment"
 import { DoctorStatusEnum } from "../enum/doctor_status.enum";
 import sequelize  from '../config/connectDB';
+import { Op } from "sequelize";
 
 let getAllDoctors = (status, specialty) => {
     return new Promise(async (resolve, reject) => {
@@ -22,7 +23,6 @@ let getAllDoctors = (status, specialty) => {
             if (specialty !== 'all') {
                 whereClause.specialtyId = specialty
             }
-            console.log('check where::', whereClause);
 
             const doctors = await Doctor.findAll({
                 where: whereClause,
@@ -239,13 +239,28 @@ let getListSpecialties = () => {
 let getDoctorsBySpecialty = (specialtyId) => {
     return new Promise(async (resolve, reject) => {
         try {
-            
-
             const doctors = await Doctor.findAll({
                 where: { 
                     specialtyId: specialtyId,
                     status: DoctorStatusEnum.ACTIVE
-                }
+                },
+                attributes: {
+                    exclude: ['createdAt', 'updatedAt', 'citizenCard']
+                },
+                include: [
+                    // {
+                    //     model: Room,
+                    //     required: true,
+                    //     as: 'doctorRoom',
+                    //     attributes: ['id', 'name', 'number'] // Chỉ định các trường muốn lấy ra
+                    // },
+                    {
+                        model: User,
+                        required: true,
+                        as: 'doctorInformation',
+                        attributes: ['id', 'fullName', 'email', 'gender', 'avatar'] 
+                    },
+                ],
             });
 
             resolve({
@@ -490,6 +505,52 @@ let getTopSpecialties = async () => {
     })
 };
 
+let getRandomTopDoctors = async () => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const topSpecialties = await getTopSpecialties();
+            const specialtyIds = topSpecialties.data.map(specialty => specialty.id);
+
+            const doctors = await Doctor.findAll({
+                where: {
+                    specialtyId: {
+                        [Op.in]: specialtyIds
+                    },
+                    status: DoctorStatusEnum.ACTIVE
+                },
+                attributes: {
+                    exclude: ['createdAt', 'updatedAt', 'citizenCard']
+                },
+                include: [
+                    {
+                        model: Specialty,
+                        required: true,
+                        as: 'doctorSpecialty',
+                        attributes: ['id', 'nameVi', 'nameEn'] 
+                    },
+                    {
+                        model: User,
+                        required: true,
+                        as: 'doctorInformation',
+                        attributes: ['id', 'fullName', 'email', 'gender', 'role'] 
+                    },
+                ]
+            });
+
+            const shuffledDoctors = doctors.sort(() => Math.random() - 0.5);
+            const randomDoctors = shuffledDoctors.slice(0, 3);
+
+            resolve({
+                errCode: 0,
+                message: 'OK',
+                data: randomDoctors
+            });
+        } catch (error) {
+            reject(error);
+        }
+    });
+};
+
 const paginateAllDoctors = async (page, limit) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -546,6 +607,29 @@ const paginateAllDoctors = async (page, limit) => {
     })
 };
 
+const getSpecialtyById = async (specialtyId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const specialty = await Specialty.findOne({
+                where: {
+                    id: specialtyId
+                },
+                attributes: {
+                    exclude: ['createdAt', 'updatedAt']
+                }
+            })
+
+            resolve({
+                errCode: 0,
+                message: 'OK',
+                data: specialty
+            })
+        } catch (error) {
+            reject(error)
+        }
+    })
+};
+
 module.exports = {
     getAllDoctors,
     createNewDoctor,
@@ -559,5 +643,7 @@ module.exports = {
     findSuitableDoctorForAppointment,
     getAllActiveDoctors,
     getTopSpecialties,
-    paginateAllDoctors
+    paginateAllDoctors,
+    getRandomTopDoctors,
+    getSpecialtyById
 };

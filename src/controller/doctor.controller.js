@@ -147,7 +147,18 @@ let getAllActiveDoctors = async (req, res) => {
 let getTopSpecialties = async (req, res) => {
     let topSpecialties = await doctorService.getTopSpecialties();
     return res.status(200).json(topSpecialties)
-};
+}
+
+let getRandomTopDoctors = async (req, res) => {
+    let topDoctors = await doctorService.getRandomTopDoctors();
+    return res.status(200).json(topDoctors)
+}
+
+let getSpecialtyById = async (req, res) => {
+    const specialtyId = req.params.specialtyId
+    let specialty = await doctorService.getSpecialtyById(specialtyId);
+    return res.status(200).json(specialty)
+}
 
 module.exports = {
     getAllDoctors,
@@ -162,5 +173,7 @@ module.exports = {
     findSuitableDoctorForAppointment,
     getAllActiveDoctors,
     getTopSpecialties,
-    paginateAllDoctors
+    paginateAllDoctors,
+    getRandomTopDoctors,
+    getSpecialtyById
 }

@@ -28,7 +28,7 @@ let createNewAppointment = (appointmentData) => {
             } else {
                 resolve({
                     errCode: 1,
-                    message: 'Create new appointment failed.'
+                    message: 'Đặt lịch thất bại.'
                 })
             }
         } catch (error) {

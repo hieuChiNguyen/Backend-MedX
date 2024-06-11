@@ -18,9 +18,9 @@ let createHistoryAppointment = async (req, res) => {
     let appointmentHistory = await historyService.createHistoryAppointment(data);
 
     if (appointmentHistory.errCode === 0) {
-        return res.status(200).json(appointmentHistory);
-    } else {
-        return res.status(400).json(appointmentHistory)
+        return res.status(201).json(appointmentHistory);
+    } else if (appointmentHistory.errCode === 1){
+        return res.status(200).json(appointmentHistory)
     }
 }
 

@@ -68,17 +68,25 @@ let createHistoryAppointment = (data) => {
             })
 
             if (appointment) {
+                const result = {
+                    description: data.description,
+                    files: data.files,
+                    doctorId: data.doctorId,
+                    appointmentId: data.appointmentId
+                };
+
+                await History.update(result, {
+                    where: {
+                        appointmentId: data.appointmentId
+                    }
+                })
+
                 resolve({
                     errCode: 1,
                     message: 'Kết quả khám đã được cập nhật',
+                    data: result
                 })
             } else {
-                // let files = data.files;
-                // if (typeof files !== 'string') {
-                //     // Nếu `files` không phải là một chuỗi, chuyển đổi nó thành chuỗi JSON
-                //     files = JSON.stringify(files);
-                // }
-
                 const result = await History.create({
                     description: data.description,
                     files: data.files,
@@ -141,10 +149,18 @@ let shareAppointmentInfo = (data) => {
 
                 for (const email of data.emails) {
                     try {
-                        const from = 'nguyenchihieu1707@gmail.com';
-                        const subject = 'Truy cập kết quả lịch khám';
-                        const text = `Mã xác nhận: ${data.code}`
-                        await sendEmail(from, email, subject, text, '');
+                        const from = 'nguyenchihieu1707@gmail.com'
+                        const subject = 'Truy cập kết quả lịch khám'
+                        // const html = `
+                        //     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
+                        //         <h2 style="color: #007bff;">Truy cập kết quả lịch khám</h2>
+                        //         <p>Mã xác nhận:</p>
+                        //         <p style="font-size: 20px; font-weight: bold; color: #007bff;">${data.code}</p>
+                        //         <p>Mã xác nhận này có hiệu lực trong vòng 5 phút.</p>
+                        //     </div>
+                        // `
+                        const text = `Mã xác nhận: ${data.code}. Mã này có hiệu lực trong 5 phút.`
+                        await sendEmail(from, email, subject, text, '')
                     } catch (emailError) {
                         console.error('Failed to send email: ', emailError);
                     }

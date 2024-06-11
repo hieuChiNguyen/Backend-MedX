@@ -7,6 +7,7 @@ import scheduleController from '../controller/schedule.controller'
 import appointmentDoctorController from '../controller/appointment_doctor.controller'
 import markdownController from '../controller/markdown.controller'
 import historyController from '../controller/history.controller'
+import emailController from '../controller/email.controller'
 import authJwt from '../middleware/auth.middleware'
 import { RoleEnum } from '../enum/role.enum';
 
@@ -33,6 +34,7 @@ let initWebRouters = (app) => {
         doctorController.getAllDoctors
     );
     router.get('/api/v1/doctor/active', doctorController.getAllActiveDoctors);
+    router.get('/api/v1/doctor/top', doctorController.getRandomTopDoctors)
     router.get('/api/v1/doctor/active/:page/:limit', doctorController.paginateAllDoctors)
     router.get('/api/v1/doctor/:doctorId', doctorController.getDetailDoctorById)
     router.get('/api/v1/positions', doctorController.getAllPositions)
@@ -54,6 +56,7 @@ let initWebRouters = (app) => {
     router.get('/api/v1/specialty/:specialtyId', doctorController.getDoctorsBySpecialty)
     router.get('/api/v1/specialties/:page/:limit', doctorController.paginateAllSpecialties)
     router.get('/api/v1/specialties/top', doctorController.getTopSpecialties)
+    router.get('/api/v1/specialty/detail/:specialtyId', doctorController.getSpecialtyById)
 
     // Patient
     router.get('/api/v1/provinces', patientController.getAllProvinces)
@@ -138,6 +141,7 @@ let initWebRouters = (app) => {
         authJwt.verifyRole([RoleEnum.DOCTOR, RoleEnum.RECEPTIONIST, RoleEnum.ADMIN]),
         scheduleController.getAllSchedules
     )
+    router.post('/api/v1/schedule/remain', scheduleController.getRemainScheduleByDate)
 
     // Markdown
     router.post(
@@ -169,6 +173,14 @@ let initWebRouters = (app) => {
         historyController.shareAppointmentInfo
     )
     router.post('/api/v1/history/check', historyController.checkVerifyCode)
+
+    // Email
+    router.post(
+        '/api/v1/email/feedback',
+        authJwt.verifyToken,
+        authJwt.verifyRole([RoleEnum.PATIENT, RoleEnum.DOCTOR]),
+        emailController.sendFeedBack
+    )
 
     return app.use('/', router);
 };

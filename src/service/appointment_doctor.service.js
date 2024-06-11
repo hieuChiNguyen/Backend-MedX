@@ -83,8 +83,6 @@ let addDoctorToAppointment = (data) => {
                 })
             }
 
-            console.log('check aD:', appointmentDoctor);
-
             if (appointmentDoctor) {
                 resolve({
                     errCode: 2,
@@ -134,9 +132,6 @@ let addDoctorToAppointment = (data) => {
                     }
                 )
 
-                console.log('updated::', updated);
-                console.log('_updated::', _updated);
-
                 resolve({
                     errCode: 0,
                     message: 'OK',
@@ -144,7 +139,6 @@ let addDoctorToAppointment = (data) => {
                 }); 
             }
         } catch (error) {
-            console.log('check error::', error);
             reject(error);
         }
     });
