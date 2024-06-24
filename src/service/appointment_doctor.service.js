@@ -163,15 +163,32 @@ let getAllAppointmentsByDoctorId = (doctorId) => {
                         as: 'doctorAppointment_appointment',
                         attributes: {
                             exclude: ['createdAt', 'updatedAt']
-                        } 
+                        },
+                        include: [
+                            {
+                                model: User,
+                                required: true,
+                                as: 'patientAppointment',
+                                attributes: {
+                                    exclude: ['createdAt', 'updatedAt', 'password', 'username', 'avatar', 'role', 'phone']
+                                }
+                            }
+                        ]
                     },
+                ],
+                order: [
+                    ['date', 'DESC'],
+                    ['createdAt', 'DESC']
                 ]
             });
+
+            const length = allAppointments.length
 
             resolve({
                 errCode: 0,
                 message: 'OK',
-                data: allAppointments
+                data: allAppointments,
+                length: length
             })
         } catch (error) {
             reject(error)

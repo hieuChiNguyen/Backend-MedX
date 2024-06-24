@@ -1,7 +1,7 @@
 import { Op, Sequelize } from "sequelize"
 import Doctor from "../model/doctor"
 import Schedule from "../model/schedule"
-const { startOfWeek, endOfWeek, addDays, format } = require('date-fns')
+const { getDay, addDays, format } = require('date-fns')
 
 let checkExistDoctor = (doctorId) => {
     return new Promise(async (resolve, reject) => {
@@ -25,21 +25,29 @@ let getAllSchedulesByDoctorId = (doctorId) => {
         try {
             let check_doctor = await checkExistDoctor(doctorId)
             if (check_doctor) {
-                let currentDate = new Date();
-
-                // Xác định đầu tuần (thứ 2)
-                let startOfWeekDate = startOfWeek(currentDate, { weekStartsOn: 1 }); // Thứ 2
-                // let endOfWeekDate = endOfWeek(currentDate, { weekStartsOn: 1 }); // Chủ nhật
-
-                // Chỉ lấy dữ liệu từ thứ 2 đến thứ 6
-                let startDate = startOfWeekDate;
-                let endDate = addDays(startOfWeekDate, 5); // Thứ 6
+                const now = new Date();
+                const currentDate = new Date(now.toISOString().split('T')[0])
+                const dayOfWeek = getDay(currentDate)
+                let startDate, endDate;
+            
+                if (dayOfWeek === 6) {
+                    startDate = addDays(currentDate, 2); // Next Monday
+                    endDate = addDays(currentDate, 6); // Next Friday
+                } else if (dayOfWeek === 0) {
+                    startDate = addDays(currentDate, 1); // Next Monday
+                    endDate = addDays(currentDate, 5); // Next Friday
+                } else {
+                    const daysUntilFriday = 5 - dayOfWeek; // Calculate days until next Friday
+                    startDate = currentDate;
+                    endDate = addDays(currentDate, daysUntilFriday); // Calculate the date for the upcoming Friday
+                }
 
                 const schedules = await Schedule.findAll({
                     where: {
                         doctorId: doctorId,
                         date: {
-                            [Op.between]: [format(startDate, 'yyyy-MM-dd'), format(endDate, 'yyyy-MM-dd')]
+                            // [Op.between]: [format(startDate, 'yyyy-MM-dd'), format(endDate, 'yyyy-MM-dd')]
+                            [Op.between]: [startDate, endDate]
                         }
                     },
                     attributes: {

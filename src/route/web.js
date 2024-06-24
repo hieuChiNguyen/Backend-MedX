@@ -8,6 +8,7 @@ import appointmentDoctorController from '../controller/appointment_doctor.contro
 import markdownController from '../controller/markdown.controller'
 import historyController from '../controller/history.controller'
 import emailController from '../controller/email.controller'
+import receptionistController from '../controller/receptionist.controller'
 import authJwt from '../middleware/auth.middleware'
 import { RoleEnum } from '../enum/role.enum';
 
@@ -57,6 +58,12 @@ let initWebRouters = (app) => {
     router.get('/api/v1/specialties/:page/:limit', doctorController.paginateAllSpecialties)
     router.get('/api/v1/specialties/top', doctorController.getTopSpecialties)
     router.get('/api/v1/specialty/detail/:specialtyId', doctorController.getSpecialtyById)
+    router.post(
+        '/api/v1/specialty/create',
+        authJwt.verifyToken, 
+        authJwt.verifyRole([RoleEnum.ADMIN]),
+        doctorController.createNewSpecialty
+    )
 
     // Patient
     router.get('/api/v1/provinces', patientController.getAllProvinces)
@@ -71,7 +78,8 @@ let initWebRouters = (app) => {
     router.get(
         '/api/v1/patients',
         authJwt.verifyToken, 
-        authJwt.verifyRole([RoleEnum.ADMIN]),
+        authJwt.verifyRole([RoleEnum.ADMIN, RoleEnum.RECEPTIONIST]),
+        // authJwt.verifyRole([RoleEnum.ADMIN]),
         patientController.getAllPatients
     )
     router.post(
@@ -80,7 +88,11 @@ let initWebRouters = (app) => {
         authJwt.verifyRole([RoleEnum.RECEPTIONIST, RoleEnum.ADMIN]),
         patientController.createNewPatient
     )
-    router.put('/api/v1/user/update-avatar', patientController.updateUserAvatar);
+    // router.put('/api/v1/user/update-avatar', patientController.updateUserAvatar);
+    router.patch(
+        '/api/v1/user/update-avatar',
+        patientController.updateUserAvatar
+    )
 
     // Appointment
     router.post(
@@ -89,7 +101,7 @@ let initWebRouters = (app) => {
         authJwt.verifyRole([RoleEnum.PATIENT, RoleEnum.ADMIN, RoleEnum.RECEPTIONIST]), 
         appointmentController.createNewAppointment
     )
-    router.get('/api/v1/prices', authJwt.verifyToken, authJwt.verifyRole([RoleEnum.PATIENT, RoleEnum.ADMIN]), appointmentController.getAllPrices)
+    router.get('/api/v1/prices', appointmentController.getAllPrices)
     router.get(
         '/api/v1/appointment', 
         authJwt.verifyToken, 
@@ -104,7 +116,7 @@ let initWebRouters = (app) => {
     router.get(
         '/api/v1/appointments/history/:patientId', 
         authJwt.verifyToken, 
-        authJwt.verifyRole([RoleEnum.PATIENT, RoleEnum.ADMIN]), 
+        authJwt.verifyRole([RoleEnum.PATIENT]), 
         appointmentController.getAppointmentsByPatientId
     )
     router.patch(
@@ -180,6 +192,35 @@ let initWebRouters = (app) => {
         authJwt.verifyToken,
         authJwt.verifyRole([RoleEnum.PATIENT, RoleEnum.DOCTOR]),
         emailController.sendFeedBack
+    )
+
+    // Receptionist
+    router.post(
+        '/api/v1/receptionist/create',
+        authJwt.verifyToken,
+        authJwt.verifyRole([RoleEnum.ADMIN]),
+        receptionistController.createNewReceptionist
+    )
+
+    router.get(
+        '/api/v1/receptionist',
+        authJwt.verifyToken,
+        authJwt.verifyRole([RoleEnum.ADMIN]),
+        receptionistController.getAllReceptionists
+    )
+
+    router.delete(
+        '/api/v1/receptionist/delete/:receptionistId',
+        authJwt.verifyToken,
+        authJwt.verifyRole([RoleEnum.ADMIN]),
+        receptionistController.deleteReceptionist
+    )
+
+    router.patch(
+        '/api/v1/receptionist/edit/:receptionistId',
+        authJwt.verifyToken,
+        authJwt.verifyRole([RoleEnum.ADMIN]),
+        receptionistController.editReceptionist
     )
 
     return app.use('/', router);

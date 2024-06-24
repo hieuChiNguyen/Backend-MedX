@@ -36,29 +36,29 @@ let getAllPrices = async(req, res) => {
     }
 }
 
-let addDoctorToAppointment = async (req, res) => {
-    try {
-        await Appointment_Doctor.sync();
-        let data = req.body;
+// let addDoctorToAppointment = async (req, res) => {
+//     try {
+//         await Appointment_Doctor.sync();
+//         let data = req.body;
 
-        let newAppointmentDoctor = await appointmentService.addDoctorToAppointment(data);
+//         let newAppointmentDoctor = await appointmentService.addDoctorToAppointment(data);
 
-        if (newAppointmentDoctor.errCode === 0) {
-            return res.status(201).json(newAppointmentDoctor);
-        } else if(newAppointmentDoctor.errCode === 1) {
-            return res.status(400).json(newAppointmentDoctor);
-        }
-    } catch (error) {
-        return res.status(400).json({
-            errCode: 2,
-            message: 'Chưa điền đủ thông tin khám bệnh.'
-        });
-    }
-}
+//         if (newAppointmentDoctor.errCode === 0) {
+//             return res.status(201).json(newAppointmentDoctor);
+//         } else if(newAppointmentDoctor.errCode === 1) {
+//             return res.status(400).json(newAppointmentDoctor);
+//         }
+//     } catch (error) {
+//         return res.status(400).json({
+//             errCode: 2,
+//             message: 'Chưa điền đủ thông tin khám bệnh.'
+//         });
+//     }
+// }
 
 let getAllAppointments = async (req, res) => {
-    const { status } = req.query
-    let appointments = await appointmentService.getAllAppointments(status);
+    const { status, specialty, start, end } = req.query
+    let appointments = await appointmentService.getAllAppointments(status, specialty, start, end);
     return res.status(200).json(appointments)
 };
 
@@ -86,11 +86,11 @@ let getAppointmentsByPatientId = async (req, res) => {
     }
 }
 
-let shareAppointmentInfo = async (req, res) => {
-    const appointmentId = req.params.appointmentId
-    let appointmentInfo = await appointmentService.shareAppointmentInfo(appointmentId);
-    return res.status(200).json(appointmentInfo)
-}
+// let shareAppointmentInfo = async (req, res) => {
+//     const appointmentId = req.params.appointmentId
+//     let appointmentInfo = await appointmentService.shareAppointmentInfo(appointmentId);
+//     return res.status(200).json(appointmentInfo)
+// }
 
 let cancelAppointment = async (req, res) => {
     const appointmentId = req.params.appointmentId
@@ -101,10 +101,10 @@ let cancelAppointment = async (req, res) => {
 module.exports = {
     createNewAppointment,
     getAllPrices,
-    addDoctorToAppointment,
+    // addDoctorToAppointment,
     getAllAppointments,
     getAppointmentById,
     getAppointmentsByPatientId,
-    shareAppointmentInfo,
+    // shareAppointmentInfo,
     cancelAppointment
 }

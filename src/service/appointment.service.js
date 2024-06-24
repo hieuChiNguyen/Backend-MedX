@@ -1,4 +1,4 @@
-import { where } from "sequelize";
+import { Op, where } from "sequelize";
 import { AppointmentStatusEnum } from "../enum/appointment_status.enum";
 import Appointment from "../model/appointment";
 import Price from "../model/price";
@@ -57,7 +57,7 @@ let getPrices = () => {
     })
 }
 
-let getAllAppointments = (status) => {
+let getAllAppointments = (status, specialty, start, end) => {
     return new Promise(async (resolve, reject) => {
         try {
             let whereClause = {};
@@ -70,6 +70,35 @@ let getAllAppointments = (status) => {
                 whereClause.status = 'Đã khám xong';
             } else if (status === 'cancel') {
                 whereClause.status = 'Đã hủy';
+            }
+
+            if (specialty !== 'all' && specialty !== undefined) {
+                whereClause.specialtyId = specialty
+            }
+
+            if (start && !end) {
+                whereClause.appointmentDate = {
+                    [Op.and]: {
+                        [Op.gte]: new Date(start),
+                    }
+                };
+            }
+
+            if (end && !start) {
+                whereClause.appointmentDate = {
+                    [Op.and]: {
+                        [Op.lte]: new Date(end)  
+                    }
+                };
+            }
+
+            if (start && end) {
+                whereClause.appointmentDate = {
+                    [Op.and]: {
+                        [Op.gte]: new Date(start),
+                        [Op.lte]: new Date(end)   
+                    }
+                };
             }
 
             const appointments = await Appointment.findAll({
@@ -147,6 +176,9 @@ let getAppointmentsByPatientId = (patientId) => {
                             exclude: ['createdAt', 'updatedAt']
                         } 
                     }
+                ],
+                order: [
+                    ['createdAt', 'DESC']
                 ]
             });
 

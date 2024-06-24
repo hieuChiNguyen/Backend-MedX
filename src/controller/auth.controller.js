@@ -79,7 +79,7 @@ let handleLogin = async (req, res) => {
 let handleLogout = async (req, res) => {
     res.clearCookie('refreshToken');
     return res.status(200).json({
-        message: 'Logged out successfully.'
+        message: 'Đăng xuất thành công.'
     });
 };
 

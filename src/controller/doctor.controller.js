@@ -17,7 +17,9 @@ let createNewDoctor = async (req, res) => {
 
         if (newDoctor.errCode === 0) {
             return res.status(201).json(newDoctor);
-        } 
+        } else {
+            return res.status(404).json(newDoctor);
+        }
     } catch (error) {
         return res.status(400).json({
             errCode: 2,
@@ -160,6 +162,16 @@ let getSpecialtyById = async (req, res) => {
     return res.status(200).json(specialty)
 }
 
+let createNewSpecialty = async (req, res) => {{
+    const data = req.body
+    let newSpecialty = await doctorService.createNewSpecialty(data);
+    if (newSpecialty.errCode === 0) {
+        return res.status(200).json(newSpecialty)
+    } else {
+        return res.status(400).json(newSpecialty)
+    }
+}}
+
 module.exports = {
     getAllDoctors,
     createNewDoctor,
@@ -175,5 +187,6 @@ module.exports = {
     getTopSpecialties,
     paginateAllDoctors,
     getRandomTopDoctors,
-    getSpecialtyById
+    getSpecialtyById,
+    createNewSpecialty
 }

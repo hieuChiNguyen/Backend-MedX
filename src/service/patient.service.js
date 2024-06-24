@@ -99,7 +99,7 @@ let getPatientInformation = (patientId) => {
     })
 }
 
-let getAllPatients = (gender) => {
+let getAllPatients = (gender, province, district, ward) => {
     return new Promise(async (resolve, reject) => {
         try {
             let whereClause = {};
@@ -111,6 +111,21 @@ let getAllPatients = (gender) => {
                 whereClause.gender = GenderEnum.FEMALE
             } else if (gender === 'others') {
                 whereClause.gender = GenderEnum.OTHERS
+            }
+
+            let addressConditions = [];
+            if (province) {
+                addressConditions.push({ address: { [Op.like]: `%${province}` } });
+            }
+            if (district) {
+                addressConditions.push({ address: { [Op.like]: `%${district}%` } });
+            }
+            if (ward) {
+                addressConditions.push({ address: { [Op.like]: `${ward}%` } });
+            }
+
+            if (addressConditions.length > 0) {
+                whereClause[Op.and] = addressConditions;
             }
 
             const patients = await User.findAll({
@@ -224,6 +239,13 @@ let createNewPatient = (patientData) => {
 let updateUserAvatar = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
+            if (!data.avatar) {
+                resolve({
+                    errCode: 2,
+                    message: 'Lỗi khi chọn ảnh',
+                });
+            }
+
             let user = await User.update(
                 { avatar: data.avatar },
                 {
@@ -231,11 +253,13 @@ let updateUserAvatar = (data) => {
                         id: data.id
                     }
                 }
-            );
+            )
+
             if (user) {
                 resolve({
                     errCode: 0,
                     message: 'OK',
+                    data: data
                 });
             }
         } catch (error) {
@@ -243,6 +267,29 @@ let updateUserAvatar = (data) => {
         }
     });
 };
+
+// let updateUserAvatar = (data) => {
+//     return new Promise(async (resolve, reject) => {
+//         try {
+//             let user = await User.update(
+//                 { avatar: data.avatar },
+//                 {
+//                     where: {
+//                         id: data.id
+//                     }
+//                 }
+//             );
+//             if (user) {
+//                 resolve({
+//                     errCode: 0,
+//                     message: 'OK',
+//                 });
+//             }
+//         } catch (error) {
+//             reject(error);
+//         }
+//     });
+// };
 
 module.exports = {
     getAllProvinces,

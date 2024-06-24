@@ -77,7 +77,8 @@ User.init(
             allowNull: false
         },
         avatar: {
-            type: DataTypes.BLOB('long'),
+            // type: DataTypes.BLOB('long'),
+            type: DataTypes.STRING,
             allowNull: true,
         },
         role: {

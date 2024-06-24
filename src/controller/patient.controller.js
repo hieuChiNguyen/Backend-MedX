@@ -27,8 +27,8 @@ let getPatientInformation = async (req, res) => {
 }
 
 let getAllPatients = async (req, res) => {
-    const { gender } = req.query
-    let patients = await patientService.getAllPatients(gender)
+    const { gender, province, district, ward } = req.query
+    let patients = await patientService.getAllPatients(gender, province, district, ward)
     return res.status(200).json(patients)
 }
 
@@ -49,15 +49,30 @@ let createNewPatient= async (req, res) => {
     }
 }
 
+// let updateUserAvatar = async (req, res) => {
+//     try {
+//         let data = req.body;
+//         let updatedData = await patientService.updateUserAvatar(data);
+//         return res.status(200).json(updatedData);
+//     } catch (error) {
+//         return res.status(400).json({ errCode: 1, message: 'Tải ảnh lên thất bại.' });
+//     }
+// };
+
 let updateUserAvatar = async (req, res) => {
     try {
         let data = req.body;
-        let updatedData = await patientService.updateUserAvatar(data);
-        return res.status(200).json(updatedData);
+        let newAvatar = await patientService.updateUserAvatar(data);
+        if(newAvatar.errCode === 0) {
+            return res.status(200).json(newAvatar);
+        } else {
+            return res.status(400).json(newAvatar);
+        }
+        
     } catch (error) {
-        return res.status(400).json({ errCode: 1, message: 'Tải ảnh lên thất bại.' });
+        return res.status(400).json({ errCode: 1, message: 'Tải ảnh lên thất bại' });
     }
-};
+}
 
 module.exports = {
     getAllProvinces,

@@ -8,6 +8,7 @@ import Appointment from "../model/appointment"
 import { DoctorStatusEnum } from "../enum/doctor_status.enum";
 import sequelize  from '../config/connectDB';
 import { Op } from "sequelize";
+import { sendEmail } from "./email.service"
 
 let getAllDoctors = (status, specialty) => {
     return new Promise(async (resolve, reject) => {
@@ -20,7 +21,7 @@ let getAllDoctors = (status, specialty) => {
                 whereClause.status = DoctorStatusEnum.INACTIVE;
             }
 
-            if (specialty !== 'all') {
+            if (specialty !== 'all' && specialty !== undefined) {
                 whereClause.specialtyId = specialty
             }
 
@@ -106,11 +107,27 @@ let createNewDoctor = (userId, doctorData) => {
                 where: { id: userId, role: 'Doctor' }
             })
 
+            if (!doctor) {
+                resolve({
+                    errCode: 1,
+                    message: 'Không tìm thấy người dùng này'
+                });
+            }
+
             let price_data = await Price.findOne({
                 where: { position: doctorData.position }
             })
 
-            if(doctor) {
+            let existedDoctor = await Doctor.findOne({
+                where: { citizenCard: doctorData.citizenCard }
+            });
+
+            if (existedDoctor) {
+                resolve({
+                    errCode: 2,
+                    message: 'Căn cước công dân đã tồn tại'
+                });
+            } else {
                 let newDoctor = await Doctor.create({
                     citizenCard: doctorData.citizenCard,
                     position: doctorData.position,
@@ -120,6 +137,84 @@ let createNewDoctor = (userId, doctorData) => {
                     status: DoctorStatusEnum.INACTIVE
                 });
 
+                const from = 'nguyenchihieu1707@gmail.com'
+                const to = doctor.email
+                const subject = 'Đăng ký hợp tác trên MedX'
+                const html = `
+                    <!DOCTYPE html>
+                    <html lang="en">
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <style>
+                            body {
+                                font-family: Arial, sans-serif;
+                                background-color: #f4f4f4;
+                                margin: 0;
+                                padding: 0;
+                            }
+                            .container {
+                                background-color: #ffffff;
+                                margin: 50px auto;
+                                padding: 20px;
+                                border-radius: 10px;
+                                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                                max-width: 600px;
+                            }
+                            .header {
+                                text-align: center;
+                                padding-bottom: 20px;
+                                border-bottom: 1px solid #dddddd;
+                            }
+                            .header h1 {
+                                margin: 0;
+                                color: #333333;
+                            }
+                            .content {
+                                padding: 20px;
+                            }
+                            .content p {
+                                line-height: 1.6;
+                                color: #666666;
+                            }
+                            .footer {
+                                text-align: center;
+                                padding-top: 20px;
+                                border-top: 1px solid #dddddd;
+                                color: #999999;
+                                font-size: 12px;
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="container">
+                            <div class="header">
+                                <h1>Chúc mừng bạn đã đăng ký thành công!</h1>
+                            </div>
+                            <div class="content">
+                                <p>Kính gửi Quý Bác sĩ,</p>
+                                <p>Chúng tôi xin chúc mừng bạn đã đăng ký tài khoản thành công trên hệ thống của chúng tôi. Để hoàn tất quy trình đăng ký, vui lòng chuẩn bị và gửi lại cho chúng tôi các giấy tờ sau:</p>
+                                <ul>
+                                    <li>Bản sao hợp lệ văn bằng chuyên môn y phù hợp với phạm vi hoạt động chuyên môn đề nghị cấp chứng chỉ hành nghề.</li>
+                                    <li>Giấy xác nhận quá trình thực hành.</li>
+                                    <li>Giấy chứng nhận đủ sức khỏe do cơ sở khám bệnh, chữa bệnh cấp.</li>
+                                    <li>Phiếu lý lịch tư pháp.</li>
+                                    <li>Sơ yếu lý lịch tự thuật.</li>
+                                    <li>Hai ảnh màu 04 cm x 06 cm được chụp trên nền trắng trong thời gian không quá 6 tháng.</li>
+                                </ul>
+                                <p>Vui lòng trả lời email này và đính kèm các giấy tờ cần thiết. Nếu bạn có bất kỳ câu hỏi nào, xin vui lòng liên hệ với chúng tôi qua email này.</p>
+                                <p>Trân trọng,</p>
+                                <p>Đội ngũ hỗ trợ MedX</p>
+                            </div>
+                            <div class="footer">
+                                <p>MedX - Số 1 Giải Phóng, Hà Nội, Việt Nam</p>
+                            </div>
+                        </div>
+                    </body>
+                    </html>
+                `
+                await sendEmail(from, to, subject, '', html)
+
                 if (newDoctor) {
                     resolve({
                         errCode: 0,
@@ -127,11 +222,6 @@ let createNewDoctor = (userId, doctorData) => {
                         data: newDoctor
                     });
                 }
-            } else {
-                resolve({
-                    errCode: 1,
-                    message: 'Không tìm thấy người dùng này'
-                })
             }
         } catch (error) {
             reject(error);
@@ -155,7 +245,7 @@ let getDetailDoctorById = (doctorId) => {
                         model: User,
                         required: true,
                         as: 'doctorInformation',
-                        attributes: ['id', 'fullName', 'email', 'gender', 'role'] 
+                        attributes: ['id', 'fullName', 'email', 'gender', 'role', 'avatar'] 
                     },
                     {
                         model: Specialty,
@@ -193,7 +283,7 @@ let getDetailDoctorByAdmin = (doctorId) => {
                         model: User,
                         required: true,
                         as: 'doctorInformation',
-                        attributes: ['id', 'fullName', 'email', 'gender', 'role', 'phone', 'address'] 
+                        attributes: ['id', 'fullName', 'email', 'gender', 'role', 'phone', 'address', 'avatar'] 
                     },
                     {
                         model: Specialty,
@@ -371,7 +461,7 @@ const paginateAllSpecialties = async (page, limit) => {
             reject(error)
         }
     })
-};
+}
 
 let findSuitableDoctorForAppointment = (data) => {
     return new Promise(async (resolve, reject) => {
@@ -385,12 +475,6 @@ let findSuitableDoctorForAppointment = (data) => {
                     status: DoctorStatusEnum.ACTIVE
                 },
                 include: [
-                    // {
-                    //     model: Room,
-                    //     required: true,
-                    //     as: 'doctorRoom',
-                    //     attributes: ['id', 'name', 'number'] // Chỉ định các trường muốn lấy ra
-                    // },
                     {
                         model: User,
                         required: true,
@@ -437,7 +521,7 @@ let findSuitableDoctorForAppointment = (data) => {
                 } else {
                     resolve({
                         errCode: 3,
-                        message: "Bác sĩ không có lịch khám này"
+                        message: "Bác sĩ không đăng ký lịch khám này"
                     })
                 }
             }
@@ -532,7 +616,7 @@ let getRandomTopDoctors = async () => {
                         model: User,
                         required: true,
                         as: 'doctorInformation',
-                        attributes: ['id', 'fullName', 'email', 'gender', 'role'] 
+                        attributes: ['id', 'fullName', 'email', 'gender', 'role', 'avatar'] 
                     },
                 ]
             });
@@ -630,6 +714,41 @@ const getSpecialtyById = async (specialtyId) => {
     })
 };
 
+let createNewSpecialty = (data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const existedSpecialty = await Specialty.findOne({
+                where:{
+                    nameEn: data.nameEn,
+                    nameVi: data.nameVi
+                }
+            })
+
+            if(existedSpecialty) {
+                resolve({
+                    errCode: 1,
+                    message: 'Chuyên khoa đã tồn tại',
+                })
+            } else {
+                let newSpecialty = await Specialty.create({
+                    nameVi: data.nameVi,
+                    nameEn: data.nameEn,
+                    image: data.image,
+                    description: data.description,
+                });
+
+                resolve({
+                    errCode: 0,
+                    message: 'OK',
+                    data: newSpecialty
+                })
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+
 module.exports = {
     getAllDoctors,
     createNewDoctor,
@@ -645,5 +764,6 @@ module.exports = {
     getTopSpecialties,
     paginateAllDoctors,
     getRandomTopDoctors,
-    getSpecialtyById
+    getSpecialtyById,
+    createNewSpecialty
 };
