@@ -1,0 +1,32 @@
+name: "medx"
+version: '3.3'
+
+services:
+  mysql:
+    image: mysql:latest
+    container_name: ${COMPOSE_PROJECT_NAME}_mysql
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: true
+      MYSQL_DATABASE: medx
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./medx.sql:/docker-entrypoint-initdb.d/medx.sql
+    networks:
+      - net
+  
+  medx-backend:
+    image: hieunguyenchi/medx-backend
+    container_name: ${COMPOSE_PROJECT_NAME}_medx-backend
+    restart: always
+    env_file:
+      - ./.env
+    depends_on:
+      - mysql
+    ports:
+      - "8080:8080"
+    networks:
+      - net
+networks:
+  net:
+    driver: bridge
