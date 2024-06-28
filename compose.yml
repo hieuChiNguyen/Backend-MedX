@@ -15,18 +15,18 @@ services:
     networks:
       - net
   
-  medx-backend:
-    image: hieunguyenchi/medx-backend
-    container_name: ${COMPOSE_PROJECT_NAME}_medx-backend
-    restart: always
-    env_file:
-      - ./.env
-    depends_on:
-      - mysql
-    ports:
-      - "8080:8080"
-    networks:
-      - net
+#   medx-backend:
+#     image: hieunguyenchi/medx-backend
+#     container_name: ${COMPOSE_PROJECT_NAME}_medx-backend
+#     restart: always
+#     env_file:
+#       - ./.env
+#     depends_on:
+#       - mysql
+#     ports:
+#       - "8080:8080"
+#     networks:
+#       - net
 networks:
   net:
     driver: bridge

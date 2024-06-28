@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 24, 2024 at 08:21 PM
+-- Generation Time: Jun 28, 2024 at 04:15 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -52,6 +52,7 @@ INSERT INTO `appointments` (`id`, `status`, `expectedTime`, `examReason`, `creat
 ('5878e41d-056e-4b89-9db6-803cceb817be', 'Đã hủy', '09:00 AM - 10:00 AM', 'Mắt có vết sưng đỏ ở gần mí mắt, đã sưng được gần 1 ngày', '2024-06-23 12:53:59', '2024-06-23 10:54:23', '6eee1844-c64d-4ea8-8676-d4ac78059041', '2024-06-24 00:00:00', 0, 'Tiến sĩ', 5),
 ('5e378ee5-f9be-4637-8db5-2dcc78961560', 'Đã khám xong', '09:00 AM - 10:00 AM', 'Kiểm tra thị lực, khám mắt định kỳ', '2024-06-23 00:51:44', '2024-06-22 18:04:27', 'cd3b96bb-0ac8-11ef-8c1a-3024a9864df8', '2024-06-24 00:00:00', 1, 'Tiến sĩ', 5),
 ('623fa7a4-2b39-413a-baaa-53eaf0c8c89c', 'Đã hủy', '09:00 AM - 10:00 AM', 'Khám mắt định kỳ', '2024-06-23 12:57:41', '2024-06-23 10:21:22', 'ac0b63a7-59df-4cb8-8548-a23b901e9107', '2024-06-24 00:00:00', 0, 'Tiến sĩ', 5),
+('766f1ecb-6dc0-4c7e-a1f6-ef4161c58e6d', 'Đã khám xong', '09:00 AM - 10:00 AM', 'Khám mắt định kỳ', '2024-06-28 20:48:53', '2024-06-28 13:54:06', '6963747c-4aa0-4a41-bf4d-5976f925679e', '2024-06-28 00:00:00', 0, 'Tiến sĩ', 5),
 ('b679ce62-a62f-4d10-9b75-00d4baae518b', 'Đã xác nhận', '09:00 AM - 10:00 AM', 'Măt sưng đỏ 2 ngày chưa khỏi', '2024-06-23 13:07:12', '2024-06-23 06:09:12', '1cd830c6-eead-4cc6-b422-6041b752757a', '2024-06-24 00:00:00', 0, 'Tiến sĩ', 5),
 ('e206b779-b2b0-4f7c-8138-e74d89be2abf', 'Đã xác nhận', '08:00 AM - 09:00 AM', 'Da có nhiều nốt đỏ nhỏ li ti, nghi ngờ viêm lỗ chân lông', '2024-06-23 18:15:30', '2024-06-23 11:16:56', '07d8712d-e36e-4f52-96a7-5eb725751f9c', '2024-06-26 00:00:00', 0, 'Tiến sĩ', 4),
 ('f9cfe6c6-9291-484d-bfa8-bc05a0b65b85', 'Đã khám xong', '10:00 AM - 11:00 AM', 'Kiểm tra xem có được mổ mắt hay không', '2024-06-23 23:53:59', '2024-06-23 16:57:44', 'fdeaafa8-d838-42a4-8484-520e8e0c3071', '2024-06-26 00:00:00', 0, 'Phó giáo sư', 5);
@@ -81,6 +82,7 @@ CREATE TABLE `appointment_doctors` (
 INSERT INTO `appointment_doctors` (`id`, `date`, `timeSlot`, `priority`, `createdAt`, `updatedAt`, `appointmentId`, `doctorId`, `createBy`) VALUES
 ('0284093b-d787-4965-aa9a-7b7972639798', '2024-06-24 00:00:00', '09:30 AM - 10:00 AM', '3', '2024-06-23 13:00:04', '2024-06-23 13:00:04', '623fa7a4-2b39-413a-baaa-53eaf0c8c89c', '0d856945-7a30-4e3d-8fb2-ede35378fc53', '3bf8e15a-d2a7-4fe4-8bfb-d0a7028b5319'),
 ('07a7e912-250d-4c8c-9858-d94adeb90b65', '2024-06-24 00:00:00', '09:00 AM - 09:30 AM', '3', '2024-06-23 01:02:17', '2024-06-23 01:02:17', '5e378ee5-f9be-4637-8db5-2dcc78961560', '0d856945-7a30-4e3d-8fb2-ede35378fc53', '3bf8e15a-d2a7-4fe4-8bfb-d0a7028b5319'),
+('30423390-10a9-476a-a4d9-60db29534c97', '2024-06-28 00:00:00', '09:00 AM - 09:30 AM', '3', '2024-06-28 20:51:25', '2024-06-28 20:51:25', '766f1ecb-6dc0-4c7e-a1f6-ef4161c58e6d', '0d856945-7a30-4e3d-8fb2-ede35378fc53', 'cf315f63-0ac6-11ef-8c1a-3024a9864df8'),
 ('3ee4bf5f-2790-44c1-9aa1-9758dd2c304c', '2024-06-24 00:00:00', '09:30 AM - 10:00 AM', '3', '2024-06-23 13:09:12', '2024-06-23 13:09:12', 'b679ce62-a62f-4d10-9b75-00d4baae518b', '0d856945-7a30-4e3d-8fb2-ede35378fc53', '3bf8e15a-d2a7-4fe4-8bfb-d0a7028b5319'),
 ('88fe6c41-858e-4eaa-8197-3ffa89f2cd38', '2024-06-25 00:00:00', '11:00 AM - 11:30 AM', '3', '2024-06-24 21:38:01', '2024-06-24 21:38:01', '4cf18d96-359f-4d25-84ee-61798049ce4d', '0d856945-7a30-4e3d-8fb2-ede35378fc53', 'cf315f63-0ac6-11ef-8c1a-3024a9864df8'),
 ('9489546e-82ae-44d6-9ad2-71362d2af948', '2024-06-24 00:00:00', '09:00 AM - 09:30 AM', '3', '2024-06-23 12:55:35', '2024-06-23 12:55:35', '5878e41d-056e-4b89-9db6-803cceb817be', '0d856945-7a30-4e3d-8fb2-ede35378fc53', '3bf8e15a-d2a7-4fe4-8bfb-d0a7028b5319'),
@@ -109,7 +111,8 @@ CREATE TABLE `codes` (
 
 INSERT INTO `codes` (`id`, `createdAt`, `updatedAt`, `code`, `appointmentId`, `url`) VALUES
 (16, '2024-06-23 23:58:26', '2024-06-23 23:58:26', '3bO46S', 'f9cfe6c6-9291-484d-bfa8-bc05a0b65b85', 'https://firebasestorage.googleapis.com/v0/b/medx-fd8b7.appspot.com/o/files%2Fabc.docx?alt=media&token=cd837fc6-9ded-4c9f-8a58-6c50b27c10cb'),
-(17, '2024-06-24 21:41:28', '2024-06-24 21:41:28', '7EGu18', '4cf18d96-359f-4d25-84ee-61798049ce4d', 'https://firebasestorage.googleapis.com/v0/b/medx-fd8b7.appspot.com/o/files%2FBM3.doc?alt=media&token=b07e86bc-d92d-4ece-a484-48926fe0b50e');
+(17, '2024-06-24 21:41:28', '2024-06-24 21:41:28', '7EGu18', '4cf18d96-359f-4d25-84ee-61798049ce4d', 'https://firebasestorage.googleapis.com/v0/b/medx-fd8b7.appspot.com/o/files%2FBM3.doc?alt=media&token=b07e86bc-d92d-4ece-a484-48926fe0b50e'),
+(18, '2024-06-28 20:54:53', '2024-06-28 20:54:53', '0T83BA', '766f1ecb-6dc0-4c7e-a1f6-ef4161c58e6d', 'https://firebasestorage.googleapis.com/v0/b/medx-fd8b7.appspot.com/o/files%2FK%E1%BA%BFt%20qu%E1%BA%A3%20kh%C3%A1m%201.docx?alt=media&token=5cf6cdbb-9bd5-4112-a3ed-b54b33af0f1a');
 
 -- --------------------------------------------------------
 
@@ -859,6 +862,7 @@ INSERT INTO `doctors` (`id`, `price`, `position`, `status`, `description`, `crea
 ('0d856945-7a30-4e3d-8fb2-ede35378fc53', 350, 'Tiến sĩ', 'Active', NULL, '2024-06-21 22:40:15', '2024-06-21 17:39:51', 'a191c8db-0ac8-11ef-8c1a-3024a9864df8', 5, NULL, '001202003789'),
 ('18ef8913-cd43-465f-b11e-97e14c52ddee', 400, 'Phó giáo sư', 'Active', NULL, '2024-06-22 00:28:04', '2024-06-21 17:39:56', '39a56b16-efb1-415d-ba34-c89d350ceb50', 16, NULL, '001022002567'),
 ('20872af0-456f-4fca-9820-f546ba0054e6', 300, 'Thạc sĩ', 'Active', NULL, '2024-06-22 00:31:22', '2024-06-21 17:40:10', 'f3956d4a-3ecd-4169-805c-404db760b924', 11, NULL, '001202002345'),
+('24d8c06c-034d-44d8-a416-06d07c607d8e', 350, 'Tiến sĩ', 'Active', NULL, '2024-06-28 20:57:23', '2024-06-28 13:59:04', '90dfdd9f-034a-4881-973d-ba809066bc63', 17, NULL, '001202002346'),
 ('2b68c1b5-6529-472f-96d5-6c2839c8f93f', 350, 'Tiến sĩ', 'Active', NULL, '2024-06-22 00:33:47', '2024-06-21 17:40:31', 'eee7ce24-6f87-445e-b9b1-a743a904b679', 13, NULL, '001020201236'),
 ('4233c24a-68e5-4ce8-a858-ab1f9e1dc8b2', 400, 'Phó giáo sư', 'Active', NULL, '2024-06-22 00:23:32', '2024-06-21 17:40:39', '4c6deea2-9e12-49cd-a481-1d870b26e996', 6, NULL, '001222356789'),
 ('56b29a89-9fe8-4a3a-a774-e9d7cc4ec630', 400, 'Phó giáo sư', 'Active', NULL, '2024-06-21 22:43:31', '2024-06-21 17:40:04', 'af29e0c2-42de-4530-a996-44c4c0c1bc18', 5, NULL, '001202002989'),
@@ -896,7 +900,8 @@ CREATE TABLE `histories` (
 INSERT INTO `histories` (`id`, `description`, `files`, `createdAt`, `updatedAt`, `doctorId`, `appointmentId`) VALUES
 (18, 'Tăng độ nhẹ 0.25, cần kết hợp nghỉ ngơi mắt khi làm việc', 'https://firebasestorage.googleapis.com/v0/b/medx-fd8b7.appspot.com/o/files%2FDoc1.docx?alt=media&token=f3a36ecf-25b9-48f0-befd-98d70a118853', '2024-06-23 01:04:27', '2024-06-23 01:04:27', '0d856945-7a30-4e3d-8fb2-ede35378fc53', '5e378ee5-f9be-4637-8db5-2dcc78961560'),
 (19, 'Đủ điều kiện có thể mổ mắt', 'https://firebasestorage.googleapis.com/v0/b/medx-fd8b7.appspot.com/o/files%2Fabc.docx?alt=media&token=cd837fc6-9ded-4c9f-8a58-6c50b27c10cb', '2024-06-23 23:57:44', '2024-06-23 23:57:44', '56b29a89-9fe8-4a3a-a774-e9d7cc4ec630', 'f9cfe6c6-9291-484d-bfa8-bc05a0b65b85'),
-(20, 'Mắt không tăng độ, ổn định', 'https://firebasestorage.googleapis.com/v0/b/medx-fd8b7.appspot.com/o/files%2FBM3.doc?alt=media&token=b07e86bc-d92d-4ece-a484-48926fe0b50e', '2024-06-24 21:41:00', '2024-06-24 21:41:00', '0d856945-7a30-4e3d-8fb2-ede35378fc53', '4cf18d96-359f-4d25-84ee-61798049ce4d');
+(20, 'Mắt không tăng độ, ổn định', 'https://firebasestorage.googleapis.com/v0/b/medx-fd8b7.appspot.com/o/files%2FBM3.doc?alt=media&token=b07e86bc-d92d-4ece-a484-48926fe0b50e', '2024-06-24 21:41:00', '2024-06-24 21:41:00', '0d856945-7a30-4e3d-8fb2-ede35378fc53', '4cf18d96-359f-4d25-84ee-61798049ce4d'),
+(21, 'Mắt tăng nhẹ 0.5 độ, kết hợp nghỉ ngơi', 'https://firebasestorage.googleapis.com/v0/b/medx-fd8b7.appspot.com/o/files%2FK%E1%BA%BFt%20qu%E1%BA%A3%20kh%C3%A1m%201.docx?alt=media&token=5cf6cdbb-9bd5-4112-a3ed-b54b33af0f1a', '2024-06-28 20:54:06', '2024-06-28 20:54:06', '0d856945-7a30-4e3d-8fb2-ede35378fc53', '766f1ecb-6dc0-4c7e-a1f6-ef4161c58e6d');
 
 -- --------------------------------------------------------
 
@@ -914,6 +919,13 @@ CREATE TABLE `markdowns` (
   `doctorId` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
   `specialtyId` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `markdowns`
+--
+
+INSERT INTO `markdowns` (`id`, `contentHTML`, `contentMarkdown`, `description`, `createdAt`, `updatedAt`, `doctorId`, `specialtyId`) VALUES
+('cafd7c94-4bb4-44ad-95e4-aedb63955d7c', '<p><strong>Khám &amp; điều trị</strong></p>\n<p>Chuyên khám và điều trị các bệnh lý Tai Mũi Họng người lớn</p>\n<p>Chuyên khám và điều trị các bệnh lý Tai Mũi Họng trẻ em</p>\n<p>Nội soi Tai Mũi Họng</p>\n<p>Thực hiện các qui trình kỹ thuật Tai Mũi Họng</p>\n<p><strong>Các bệnh về tai</strong></p>\n<p>Ù tai, nghe kém, điếc đột ngột</p>\n<p>Chẩy mủ tai, viêm tai giữa cấp, mạn</p>\n<p>Vá màng nhĩ nội soi</p>\n<p>Phát hiện sớm và điều trị tốt bệnh viêm tai giữa màng nhĩ đóng kín, không chẩy mủ ra ngoài</p>\n', '**Khám & điều trị**\n\nChuyên khám và điều trị các bệnh lý Tai Mũi Họng người lớn\n\nChuyên khám và điều trị các bệnh lý Tai Mũi Họng trẻ em\n\nNội soi Tai Mũi Họng\n\nThực hiện các qui trình kỹ thuật Tai Mũi Họng\n\n**Các bệnh về tai**\n\nÙ tai, nghe kém, điếc đột ngột\n\nChẩy mủ tai, viêm tai giữa cấp, mạn\n\nVá màng nhĩ nội soi\n\nPhát hiện sớm và điều trị tốt bệnh viêm tai giữa màng nhĩ đóng kín, không chẩy mủ ra ngoài', NULL, '2024-06-28 21:04:37', '2024-06-28 21:04:37', '24d8c06c-034d-44d8-a416-06d07c607d8e', 17);
 
 -- --------------------------------------------------------
 
@@ -1360,7 +1372,7 @@ INSERT INTO `schedules` (`id`, `currentNumber`, `maxNumber`, `date`, `timeSlot`,
 (314, 0, 2, '2024-06-27 00:00:00', '04:30 PM - 05:00 PM', '2024-06-22 15:50:33', '2024-06-22 15:50:33', '0d856945-7a30-4e3d-8fb2-ede35378fc53'),
 (315, 0, 2, '2024-06-28 00:00:00', '08:00 AM - 08:30 AM', '2024-06-22 15:50:41', '2024-06-22 15:50:41', '0d856945-7a30-4e3d-8fb2-ede35378fc53'),
 (316, 0, 2, '2024-06-28 00:00:00', '08:30 AM - 09:00 AM', '2024-06-22 15:50:41', '2024-06-22 15:50:41', '0d856945-7a30-4e3d-8fb2-ede35378fc53'),
-(317, 0, 2, '2024-06-28 00:00:00', '09:00 AM - 09:30 AM', '2024-06-22 15:50:41', '2024-06-22 15:50:41', '0d856945-7a30-4e3d-8fb2-ede35378fc53'),
+(317, 1, 2, '2024-06-28 00:00:00', '09:00 AM - 09:30 AM', '2024-06-22 15:50:41', '2024-06-28 13:51:25', '0d856945-7a30-4e3d-8fb2-ede35378fc53'),
 (318, 0, 2, '2024-06-28 00:00:00', '09:30 AM - 10:00 AM', '2024-06-22 15:50:41', '2024-06-22 15:50:41', '0d856945-7a30-4e3d-8fb2-ede35378fc53'),
 (319, 0, 2, '2024-06-28 00:00:00', '10:00 AM - 10:30 AM', '2024-06-22 15:50:41', '2024-06-22 15:50:41', '0d856945-7a30-4e3d-8fb2-ede35378fc53'),
 (320, 0, 2, '2024-06-28 00:00:00', '10:30 AM - 11:00 AM', '2024-06-22 15:50:41', '2024-06-22 15:50:41', '0d856945-7a30-4e3d-8fb2-ede35378fc53'),
@@ -1590,7 +1602,15 @@ INSERT INTO `schedules` (`id`, `currentNumber`, `maxNumber`, `date`, `timeSlot`,
 (543, 0, 2, '2024-06-28 00:00:00', '03:00 PM - 03:30 PM', '2024-06-23 16:12:15', '2024-06-23 16:12:15', '7598c550-0acd-4e5b-8cf0-e19dc41a0c53'),
 (544, 0, 2, '2024-06-28 00:00:00', '03:30 PM - 04:00 PM', '2024-06-23 16:12:15', '2024-06-23 16:12:15', '7598c550-0acd-4e5b-8cf0-e19dc41a0c53'),
 (545, 0, 2, '2024-06-28 00:00:00', '04:00 PM - 04:30 PM', '2024-06-23 16:12:15', '2024-06-23 16:12:15', '7598c550-0acd-4e5b-8cf0-e19dc41a0c53'),
-(546, 0, 2, '2024-06-28 00:00:00', '04:30 PM - 05:00 PM', '2024-06-23 16:12:15', '2024-06-23 16:12:15', '7598c550-0acd-4e5b-8cf0-e19dc41a0c53');
+(546, 0, 2, '2024-06-28 00:00:00', '04:30 PM - 05:00 PM', '2024-06-23 16:12:15', '2024-06-23 16:12:15', '7598c550-0acd-4e5b-8cf0-e19dc41a0c53'),
+(547, 0, 2, '2024-06-28 00:00:00', '08:00 AM - 08:30 AM', '2024-06-28 20:59:49', '2024-06-28 20:59:49', '24d8c06c-034d-44d8-a416-06d07c607d8e'),
+(548, 0, 2, '2024-06-28 00:00:00', '08:30 AM - 09:00 AM', '2024-06-28 20:59:49', '2024-06-28 20:59:49', '24d8c06c-034d-44d8-a416-06d07c607d8e'),
+(549, 0, 2, '2024-06-28 00:00:00', '09:00 AM - 09:30 AM', '2024-06-28 20:59:49', '2024-06-28 20:59:49', '24d8c06c-034d-44d8-a416-06d07c607d8e'),
+(550, 0, 2, '2024-06-28 00:00:00', '09:30 AM - 10:00 AM', '2024-06-28 20:59:49', '2024-06-28 20:59:49', '24d8c06c-034d-44d8-a416-06d07c607d8e'),
+(551, 0, 2, '2024-06-28 00:00:00', '10:00 AM - 10:30 AM', '2024-06-28 20:59:49', '2024-06-28 20:59:49', '24d8c06c-034d-44d8-a416-06d07c607d8e'),
+(552, 0, 2, '2024-06-28 00:00:00', '10:30 AM - 11:00 AM', '2024-06-28 20:59:49', '2024-06-28 20:59:49', '24d8c06c-034d-44d8-a416-06d07c607d8e'),
+(553, 0, 2, '2024-06-28 00:00:00', '11:00 AM - 11:30 AM', '2024-06-28 20:59:49', '2024-06-28 20:59:49', '24d8c06c-034d-44d8-a416-06d07c607d8e'),
+(554, 0, 2, '2024-06-28 00:00:00', '11:30 AM - 12:00 AM', '2024-06-28 20:59:49', '2024-06-28 20:59:49', '24d8c06c-034d-44d8-a416-06d07c607d8e');
 
 -- --------------------------------------------------------
 
@@ -1662,6 +1682,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `fullName`, `email`, `username`, `password`, `address`, `phone`, `gender`, `birthday`, `avatar`, `role`, `createdAt`, `updatedAt`) VALUES
+('0301635e-9c90-49e9-b70a-ed85626ebd1b', 'Nguyễn Văn Linh', 'tieptan1@gmail.com', 'Văn Linh', '$2a$10$v.61/Ka2NAKrQkr38jnc7eraK0jK/N9MB0aKeMZZelveNoPxPqrmy', 'Phường Dương Nội, Quận Hà Đông, Thành phố Hà Nội', '0969871768', 'Male', '2002-06-27 00:00:00', NULL, 'Receptionist', '2024-06-28 20:52:43', '2024-06-28 20:52:43'),
 ('07d8712d-e36e-4f52-96a7-5eb725751f9c', 'Nguyễn Chí Linh', 'patient8@gmail.com', 'Chí Linh', '$2a$10$gy./4nhXgZ1qV9DrwOMsruT0fy.PcCw97xoJRS9adj1tterYlzJJy', 'Xã Đức Hạnh, Huyện Bảo Lâm, Tỉnh Cao Bằng', '0387134567', 'Male', '1995-05-29 00:00:00', NULL, 'Patient', '2024-06-06 23:23:09', '2024-06-06 23:23:09'),
 ('192f3636-5723-4fa2-87c4-64b2df06a9a3', 'Nguyễn Việt Nam', 'doctor15@gmail.com', 'Việt Nam', '$2a$10$L4phfcEBIHhJPWY46C6ZX.S.i/AJH4F6u.VuKwHNpmYM/4cOYcqna', 'Phường Phúc Lợi, Quận Long Biên, Thành phố Hà Nội', '0389898989', 'Male', '1965-06-17 00:00:00', NULL, 'Doctor', '2024-06-22 00:35:37', '2024-06-22 00:35:37'),
 ('1cd830c6-eead-4cc6-b422-6041b752757a', 'Nguyễn Mạnh Nam', 'patient6@gmail.com', 'Mạnh Nam ', '$2a$10$mbrO0AHUaRX6Uy0NRJb5aeQL96oLKkSIh7Wh.3u0Rmkw7rshCT3Ee', 'Phường Nghĩa Tân, Quận Cầu Giấy, Thành phố Hà Nội', '0969888798', 'Male', '1996-06-12 00:00:00', 'https://firebasestorage.googleapis.com/v0/b/medx-fd8b7.appspot.com/o/avatars%2F1cd830c6-eead-4cc6-b422-6041b752757a_128830513_166038071890394_8249881221178896574_n.jpg?alt=media&token=2eafcab5-fd7b-41cf-b345-96542e69c704', 'Patient', '2024-06-01 09:28:49', '2024-06-23 15:23:20'),
@@ -1675,10 +1696,11 @@ INSERT INTO `users` (`id`, `fullName`, `email`, `username`, `password`, `address
 ('4c6deea2-9e12-49cd-a481-1d870b26e996', 'Nguyễn Mạnh Hùng', 'doctor11@gmail.com', 'Mạnh Hùng', '$2a$10$L4phfcEBIHhJPWY46C6ZX.S.i/AJH4F6u.VuKwHNpmYM/4cOYcqna', 'Phường Trần Phú, Thành phố Hải Dương, Tỉnh Hải Dương', '0357456788', 'Male', '1974-05-20 00:00:00', NULL, 'Doctor', '2024-06-22 00:22:58', '2024-06-22 00:22:58'),
 ('5ca837d5-defd-441c-bdc5-a1d4768b9050', 'Nguyễn Thanh Nga', 'doctor1@gmail.com', 'Thanh Nga', '$2a$10$D/kwTS2hObJ0L0vbAN.OkurHfWKi8Bp7cYpsJUa.eJk3w1gD72v8i', 'Phường Xuân Hoà, Thành phố Phúc Yên, Tỉnh Vĩnh Phúc', '0938777655', 'Female', '1977-03-18 00:00:00', 'https://firebasestorage.googleapis.com/v0/b/medx-fd8b7.appspot.com/o/doctors%2F%E1%BA%A2nh%20b%C3%A1c%20s%C4%A9%203.jpg?alt=media&token=bcd3f8f5-56eb-4956-bbfe-7ab42a2bf2e5', 'Doctor', '2024-06-21 22:41:34', '2024-06-23 15:57:33'),
 ('60473deb-0ac9-11ef-8c1a-3024a9864df8', 'Lê Thế Kỳ', 'kythemc@gmail.com', 'Thế Kỳ', '$2b$10$8NoeFbeBargsDsClhpfkDexfk0RtV6kDSJa/yTOwJ3Wbo3n6e3k/.', 'Xã Hoàng Long, Huyện Phú Xuyên, thành phố Hà Nội', '0395845678', 'Male', '1967-04-06 12:20:32', NULL, 'Doctor', '2024-05-05 12:20:32', '2024-05-05 12:20:32'),
-('631204c1-600d-43cf-8603-14fefe71ce70', 'Nguyễn Thị Châu', 'reception1@gmail.com', 'Châu Nguyễn', '$2a$10$PaWrXZ7VFEnv1OG1UKTGv.xnWjVbL8fEDu5inP6hnt66TTqIKR7ge', 'Phường Láng Hạ, Quận Đống Đa, Thành phố Hà Nội', '0368222867', 'Female', '2000-06-18 00:00:00', NULL, 'Receptionist', '2024-06-22 14:45:03', '2024-06-23 16:49:21'),
+('6963747c-4aa0-4a41-bf4d-5976f925679e', 'Nguyễn Văn Tiến', 'patient12@gmail.com', 'Văn Tiến', '$2a$10$Qzg9lV0vKNgkMquilnsjLuH.IP9bzo84.uUBXqkyj2BsmNYJnq0Su', 'Phường Vĩnh Phúc, Quận Ba Đình, Thành phố Hà Nội', '0969871787', 'Male', '2000-05-28 00:00:00', 'https://firebasestorage.googleapis.com/v0/b/medx-fd8b7.appspot.com/o/avatars%2F6963747c-4aa0-4a41-bf4d-5976f925679e_425d021b-845a-4add-8e61-7df99d068b9e.jfif?alt=media&token=85d76e93-7419-4ab3-b223-a73cee58e043', 'Patient', '2024-06-28 20:47:26', '2024-06-28 13:49:58'),
 ('6eee1844-c64d-4ea8-8676-d4ac78059041', 'Vũ Hải Nguyên', 'patient2@gmail.com', 'Hải Nguyên', '$2a$10$hus2v8xYApZCeNArYUPhUOF3kSrOvOZz.XYWmlKpvqPi35iM1hGLe', 'Xã Thanh Mai, Huyện Thanh Oai, Thành phố Hà Nội', '0323456766', 'Male', '1990-06-10 00:00:00', NULL, 'Patient', '2024-06-23 12:52:27', '2024-06-23 12:52:27'),
 ('89e9fa20-5dbc-439b-9305-7635761c6f4e', 'Nguyễn Đình Trọng', 'doctor7@gmail.com', 'Đình Trọng', '$2a$10$D/kwTS2hObJ0L0vbAN.OkurHfWKi8Bp7cYpsJUa.eJk3w1gD72v8i', 'Xã Kim Hoa, Huyện Mê Linh, Thành phố Hà Nội', '0368222866', 'Male', '1969-10-10 00:00:00', NULL, 'Doctor', '2024-06-21 23:13:01', '2024-06-21 23:13:01'),
 ('8ec2646d-fec3-4a52-81d8-e21436605d93', 'Nguyễn Bình An', 'doctor5@gmail.com', 'Bình An', '$2a$10$D/kwTS2hObJ0L0vbAN.OkurHfWKi8Bp7cYpsJUa.eJk3w1gD72v8i', 'Xã Việt Hùng, Huyện Đông Anh, Thành phố Hà Nội', '0389222676', 'Male', '1967-06-11 00:00:00', NULL, 'Doctor', '2024-06-21 22:47:40', '2024-06-21 22:47:40'),
+('90dfdd9f-034a-4881-973d-ba809066bc63', 'Nguyễn Chí Hiếu', 'doctor16@gmail.com', 'Chí Hiếu', '$2a$10$Qzg9lV0vKNgkMquilnsjLuH.IP9bzo84.uUBXqkyj2BsmNYJnq0Su', 'Phường Lê Đại Hành, Quận Hai Bà Trưng, Thành phố Hà Nội', '0969871777', 'Male', '1980-06-26 00:00:00', NULL, 'Doctor', '2024-06-28 20:56:34', '2024-06-28 20:56:34'),
 ('924bbeab-72d0-475e-ac83-f49c7a8e8be0', 'Nguyễn Văn Tùng', 'doctor8@gmail.com', 'Văn Tùng', '$2a$10$D/kwTS2hObJ0L0vbAN.OkurHfWKi8Bp7cYpsJUa.eJk3w1gD72v8i', 'Phường Cát Linh, Quận Đống Đa, Thành phố Hà Nội', '0389232789', 'Male', '1986-06-12 00:00:00', NULL, 'Doctor', '2024-06-21 23:17:24', '2024-06-21 23:17:24'),
 ('93801944-e462-4931-b283-bbf947cc3b64', 'Nguyen Sy Hai', 'patient5@gmail.com', 'Sỹ Hải', '$2a$10$hwu7J5foHmkD2JRT/nATp.paGWzHu6bJrzT2QpBMBbVBthqHR3EQ2', 'Xã Nam Tiến, Huyện Phú Xuyên, Thành phố Hà Nội', '0969888796', 'Male', '1970-01-06 00:00:00', NULL, 'Patient', '2024-06-01 07:40:29', '2024-06-01 07:40:29'),
 ('9d0cd50e-0ac9-11ef-8c1a-3024a9864df8', 'Lê Xuận Đức', 'ducbayco@gmail.com', 'Xuân Đức', '$2b$10$8NoeFbeBargsDsClhpfkDexfk0RtV6kDSJa/yTOwJ3Wbo3n6e3k/.', 'Xã Phú Túc, Huyện Phú Xuyên, Thành phố Hà Nội', '0387678156', 'Male', '2024-10-22 00:00:00', NULL, 'Doctor', '2024-05-05 12:22:33', '2024-05-05 12:22:33'),
@@ -12439,13 +12461,13 @@ ALTER TABLE `wards`
 -- AUTO_INCREMENT for table `codes`
 --
 ALTER TABLE `codes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `histories`
 --
 ALTER TABLE `histories`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `prices`
@@ -12463,7 +12485,7 @@ ALTER TABLE `rooms`
 -- AUTO_INCREMENT for table `schedules`
 --
 ALTER TABLE `schedules`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=547;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=555;
 
 --
 -- AUTO_INCREMENT for table `specialties`

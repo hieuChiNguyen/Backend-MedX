@@ -34,7 +34,7 @@ Code.init(
     },
     {
         sequelize,
-        modelName: 'Code',
+        modelName: 'code',
         hooks: {
             beforeCreate: (appointmentDoctor, options) => {
                 appointmentDoctor.createdAt = new Date(appointmentDoctor.createdAt.getTime() + 7 * 60 * 60 * 1000);

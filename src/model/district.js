@@ -30,7 +30,7 @@ District.init(
     },
     {
         sequelize,
-        modelName: 'District',
+        modelName: 'district',
         hooks: {
             beforeCreate: (appointmentDoctor, options) => {
                 appointmentDoctor.createdAt = new Date(appointmentDoctor.createdAt.getTime() + 7 * 60 * 60 * 1000);
