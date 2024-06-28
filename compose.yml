@@ -6,7 +6,7 @@ services:
     image: mysql:latest
     container_name: ${COMPOSE_PROJECT_NAME}_mysql
     environment:
-      MYSQL_ALLOW_EMPTY_PASSWORD: true
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
       MYSQL_DATABASE: medx
     ports:
       - "3306:3306"
@@ -14,7 +14,11 @@ services:
       - ./medx.sql:/docker-entrypoint-initdb.d/medx.sql
     networks:
       - net
-  
+  medx-frontend:
+    image: hieunguyenchi/medx-frontend
+    container_name: ${COMPOSE_PROJECT_NAME}_medx-frontend
+    ports:
+      - "80:80"
 #   medx-backend:
 #     image: hieunguyenchi/medx-backend
 #     container_name: ${COMPOSE_PROJECT_NAME}_medx-backend
